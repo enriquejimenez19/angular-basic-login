@@ -9,7 +9,7 @@ import { map } from 'rxjs/operators';
 export class AuthService {
   private url = 'https://identitytoolkit.googleapis.com/v1/accounts:';
   private apiKey = 'AIzaSyAiy_yrlxKUg9zln-7OhwDCW5GSlmzR6JU';
-  userToken: string;
+  userToken: string = '';
   //Crear nuevo usuario
   //https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=[API_KEY]
   
@@ -68,5 +68,9 @@ export class AuthService {
       this.userToken = '';
     }
     return this.userToken;
+  }
+
+  estaAutenticado(): boolean{
+    return this.userToken.length > 2;
   }
 }
