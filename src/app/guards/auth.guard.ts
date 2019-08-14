@@ -17,6 +17,7 @@ constructor (private auth: AuthService,
     }
     else{
       this.router.navigateByUrl('/login');
+      return false;
     }
   }
   
