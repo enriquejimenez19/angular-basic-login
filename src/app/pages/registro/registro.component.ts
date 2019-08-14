@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { UsuarioModel } from 'src/app/models/usuario.model';
 import { NgForm } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
+import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-registro',
@@ -12,7 +14,8 @@ export class RegistroComponent implements OnInit {
 
   usuario: UsuarioModel;
 
-  constructor(private auth: AuthService) { }
+  constructor(private auth: AuthService, 
+              private router: Router) { }
 
   ngOnInit() { 
     this.usuario = new UsuarioModel();
@@ -22,8 +25,25 @@ export class RegistroComponent implements OnInit {
     if(form.invalid){
       return; 
     }
-    
+
+    Swal.fire({
+      allowOutsideClick: false,
+      type:'info',
+      text:'Espere por favor',
+    });
+    Swal.showLoading();
     this.auth.register(this.usuario)
-      .subscribe(resp => console.log(resp), err => console.log(err.error.error.message));
+      .subscribe(resp => {
+        console.log(resp);
+        Swal.close();
+        this.router.navigateByUrl('/home');
+      }, err => {
+        console.log(err.error.error.message);
+        Swal.fire({
+          type:'error',
+          title:'Error al autenticar',
+          text:err.error.error.message,
+        });
+      });
   }
 }
